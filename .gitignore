@@ -1,0 +1,4 @@
+*.*~
+*.pyc
+development.ini
+*.egg-info
