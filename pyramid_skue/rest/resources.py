@@ -28,7 +28,7 @@ Created on Apr 6, 2012
 # OTHER DEALINGS IN THE SOFTWARE.
 
 # ***** Python built-in modules *****
-import os
+import traceback
 import importlib
 from types import StringTypes
 
@@ -132,7 +132,7 @@ class RestResource(BaseHandler):
             return self.send_response(method(*args, **kwargs))
         except ResponseError, error:
             return self.send_response(error.get_http_response())
-        except Exception, error:
+        except Exception as error:
             # self.logger.exception('An unexpected error has occur')
             return self.handle_unexpected_error(error)
 
@@ -171,7 +171,7 @@ class RestResource(BaseHandler):
             self.__validate_request()
             # Validate the parameters
             self.__validate_parameters()
-        except Exception, error:
+        except Exception as error:
             #self.logger.exception('An unexpected error has occur')
             return self.handle_unexpected_error(error)
 
@@ -338,7 +338,7 @@ class RestResource(BaseHandler):
           An HTTP 500 error response if not in development environment.
         """
         # return self.error(500)
-        raise error
+        raise error.__class__(traceback.format_exc(error))
 
     #===========================================================================
     # The HTTP Method Handlers
