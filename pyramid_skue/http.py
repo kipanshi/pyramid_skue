@@ -66,7 +66,7 @@ class HandlerHttpResponse(object):
         self._content_type = value
         self.headers['Content-Type'] = value
 
-    def __init__(self, status_code, content_type, body = "", headers = {}):
+    def __init__(self, status_code, content_type, body="", headers={}):
         """Creates a new HandlerHttpResponse with the given arguments
 
         Args:
@@ -89,6 +89,7 @@ class HandlerHttpResponse(object):
         else:
             return self.body
 
+
 #===============================================================================
 # CommonResponse
 #===============================================================================
@@ -97,8 +98,8 @@ class CommonResponse(object):
     @classmethod
     def success(cls, body, content_type=ContentType.JSON):
         http_response = HandlerHttpResponse(status_code=200,
-                                           content_type=content_type,
-                                           body=body)
+                                            content_type=content_type,
+                                            body=body)
         return http_response
 
     @classmethod
@@ -107,27 +108,28 @@ class CommonResponse(object):
         body.status = "OK"
         body.message = message
         http_response = HandlerHttpResponse(status_code=200,
-                                           content_type=content_type,
-                                           body=body)
+                                            content_type=content_type,
+                                            body=body)
         return http_response
 
     @classmethod
     def options(cls, allowed_methods, body, content_type=ContentType.JSON):
         http_response = HandlerHttpResponse(status_code=200,
-                                           content_type=content_type,
-                                           body=body,
-                                           headers={"Allow": allowed_methods})
+                                            content_type=content_type,
+                                            body=body,
+                                            headers={"Allow": allowed_methods})
         return http_response
 
     @classmethod
-    def method_not_allowed(cls, allowed_methods, content_type=ContentType.JSON):
+    def method_not_allowed(cls, allowed_methods,
+                           content_type=ContentType.JSON):
         body = ResourceJSONRepresentation('MethodNotAllowed')
         body.status = "Error"
         body.message = "Method Not Allowed"
         http_response = HandlerHttpResponse(status_code=405,
-                                           content_type=content_type,
-                                           body=body,
-                                           headers={"Allow": allowed_methods})
+                                            content_type=content_type,
+                                            body=body,
+                                            headers={"Allow": allowed_methods})
         return http_response
 
     @classmethod
@@ -136,8 +138,8 @@ class CommonResponse(object):
         body.status = "Error"
         body.message = "The resource could not be found"
         http_response = HandlerHttpResponse(status_code=404,
-                                           content_type=content_type,
-                                           body=body)
+                                            content_type=content_type,
+                                            body=body)
         return http_response
 
     @classmethod
@@ -146,10 +148,11 @@ class CommonResponse(object):
         body.status = "OK"
         body.message = "Successfully created"
         body.uri = resource_uri
-        http_response = HandlerHttpResponse(status_code=201,
-                                           content_type=content_type,
-                                           body=body,
-                                           headers={"Location": resource_uri.encode('ascii', 'ignore')})
+        http_response = HandlerHttpResponse(
+            status_code=201,
+            content_type=content_type,
+            body=body,
+            headers={"Location": resource_uri.encode('ascii', 'ignore')})
         return http_response
 
     @classmethod
@@ -168,8 +171,8 @@ class CommonResponse(object):
         body.status = "Error"
         body.message = "Not Acceptable"
         http_response = HandlerHttpResponse(status_code=406,
-                                           content_type=content_type,
-                                           body=body)
+                                            content_type=content_type,
+                                            body=body)
         return http_response
 
     @classmethod
@@ -178,6 +181,16 @@ class CommonResponse(object):
         body.status = "Error"
         body.message = message
         http_response = HandlerHttpResponse(status_code=400,
-                                           content_type=content_type,
-                                           body=body)
+                                            content_type=content_type,
+                                            body=body)
+        return http_response
+
+    @classmethod
+    def custom_server_error(cls, message, content_type=ContentType.JSON):
+        body = ResourceJSONRepresentation('CustomError')
+        body.status = "Error"
+        body.message = message
+        http_response = HandlerHttpResponse(status_code=500,
+                                            content_type=content_type,
+                                            body=body)
         return http_response
